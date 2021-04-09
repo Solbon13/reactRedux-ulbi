@@ -4,6 +4,7 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import Main from './main/Main'
 import './App.less'
 import Card from './card/Card'
+import Error from './main/Error'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -14,6 +15,7 @@ const App = () => {
                 <Switch>
                 <Route exact path='/' component={Main} />
                 <Route path='/card/:username/:reponame' component={Card} />
+                <Route path='/error' component={Error} />
                 <Redirect to='/'/>
                 </Switch>
             </div>

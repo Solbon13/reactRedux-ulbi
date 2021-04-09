@@ -5,6 +5,7 @@ import Repo from './Repo/Repo'
 import './Main.less'
 import { setCurrentPage } from '../../reducers/reposReducer'
 import { createPages } from '../../utils/pagesCreator'
+import { Redirect } from 'react-router'
 
 const Main = () => {
 
@@ -14,8 +15,9 @@ const Main = () => {
     const currentPage = useSelector(state => state.repos.currentPage)
     const perPage = useSelector(state => state.repos.perPage)
     const totalCount = useSelector(state => state.repos.totalCount)
+    const isFetchError = useSelector(state => state.repos.isFetchError)
     const [searchValue, setSearchValue] = useState("")
-    const pagesCount = Math.ceil(totalCount/perPage)
+    const pagesCount = Math.ceil(totalCount / perPage)
 
     const pages = []
     createPages(pages, pagesCount, currentPage)
@@ -29,8 +31,14 @@ const Main = () => {
         dispatch(getRepos(searchValue, currentPage, perPage))
     }
 
+
     return (
         <div>
+            {isFetchError &&
+                <div class="alert alert-danger" role="alert">
+                    Ошибка
+                </div>
+            }
             <div className="search">
                 <input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} type="text" placeholder='Input repo name' className="search-input" />
                 <button onClick={() => searchHandle()} className="search-btn">Search</button>
@@ -42,9 +50,9 @@ const Main = () => {
             }
             <div className="pages">
                 {pages.map((page, index) => <span
-                key={index}
-                className={currentPage == page ? 'current-page' : 'page'}
-                onClick={() => dispatch(setCurrentPage(page))}>{page}</span>)}
+                    key={index}
+                    className={currentPage == page ? 'current-page' : 'page'}
+                    onClick={() => dispatch(setCurrentPage(page))}>{page}</span>)}
             </div>
         </div>
     )
